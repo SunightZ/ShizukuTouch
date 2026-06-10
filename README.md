@@ -1,7 +1,7 @@
 # 项目说明
 
 **SunightTouch(ShizukuTouch)** 是一款针对 Android 平台开发的高级触控增强引擎。它利用 **Shizuku** 框架获取系统级权限，实现了对物理触控事件的底层截获、实时可视化渲染以及高精度的仿真触控注入。
-
+[![Watch the demo](assets/preview.png)](demo.mp4)
 ---
 
 本项目采用分层架构设计。
