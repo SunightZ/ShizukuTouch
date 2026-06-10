@@ -4,7 +4,7 @@
 
 ---
 
-本项目采用分层架构设计，确保了在拥有强大权限的同时，保持 UI 的响应速度与系统的稳定性。
+本项目采用分层架构设计。
 
 ### 1. 核心层：Shizuku User Service (Privileged)
 - **进程模型**：应用通过 `Shizuku.bindUserService` 将 `TouchUserService` 实例化在具有 Shell 权限的独立进程中。
