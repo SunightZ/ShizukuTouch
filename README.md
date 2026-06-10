@@ -1,6 +1,6 @@
-# SunightTouch 技术文档与项目说明
+# 项目说明
 
-**SunightTouch** 是一款针对 Android 平台开发的高级触控增强引擎。它利用 **Shizuku** 框架获取系统级权限，实现了对物理触控事件的底层截获、实时可视化渲染以及高精度的仿真触控注入。
+**SunightTouch(ShizukuTouch)** 是一款针对 Android 平台开发的高级触控增强引擎。它利用 **Shizuku** 框架获取系统级权限，实现了对物理触控事件的底层截获、实时可视化渲染以及高精度的仿真触控注入。
 
 ---
 
@@ -21,9 +21,8 @@
     - **技术细节**：直接操作 `/dev/uinput` 设备节点，在内核空间模拟一个虚拟的硬件输入设备。
     - **优势**：极低延迟（<1ms）、绕过所有应用层对虚拟按键的检测、支持完全的物理覆盖。
 *   **Java Mode (高兼容性系统级)**
-    - **实现原理**：利用反射获取 `android.hardware.input.InputManagerGlobal` (API 34+) 或 `InputManager` 实例。
+    - **实现原理**：利用反射获取 `InputManager` 实例。
     - **核心逻辑**：通过 `ShizukuBinderWrapper` 代理 `IInputManager` 接口，调用 `injectInputEvent` 方法。
-    - **优化**：在 Android 13 及以下版本采用 `INJECT_INPUT_EVENT_MODE_ASYNC` 模式以降低对 UI 线程的阻塞。
 
 ### 3. 渲染层：可视化引擎 (Visualization Engine)
 - **高性能绘制**：基于自定义 `PointerOverlayView` 实现。使用 `android.graphics.Canvas` 结合硬件加速。
@@ -32,7 +31,7 @@
 
 ---
 
-## 🚀 主要功能特性
+## 功能特性
 
 | 功能 | 技术实现描述 |
 | :--- | :--- |
@@ -44,7 +43,7 @@
 
 ---
 
-## 📦 接入与使用流程
+## 使用流程
 
 ### 1. 环境准备
 - Android 8.0+ 设备。
@@ -58,15 +57,8 @@
 
 ---
 
-## ⚠️ 开发者注意事项
-
-*   **进程生命周期**：`TouchUserService` 运行在独立进程中，若 UI 进程崩溃，需妥善处理 `ServiceConnection` 的重连机制。
-*   **资源回收**：在注入 `MotionEvent` 后，务必调用 `event.recycle()`，防止由于频繁高频注入导致的内存溢出（OOM）。
-*   **坐标系转换**：注入坐标基于物理屏幕分辨率，在处理横竖屏切换时，需调用 `updateOrientation` 同步屏幕旋转状态。
-*   **安全限制**：由于 Shizuku 权限较高，请勿在注入逻辑中执行死循环，否则可能导致系统 SystemServer 响应超（ANR）进而导致手机重启。
 
 ---
 
 **项目作者**：Sunight  
 **仓库地址**：[https://github.com/SunightZ/ShizukuTouch](https://github.com/SunightZ/ShizukuTouch)  
-**技术支持**：sunight-liuxin@qq.com
