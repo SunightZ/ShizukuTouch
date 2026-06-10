@@ -6,12 +6,12 @@
 
 本项目采用分层架构设计。
 
-### 1. 核心层：Shizuku User Service (Privileged)
+### 1. 核心层：Shizuku User Service
 - **进程模型**：应用通过 `Shizuku.bindUserService` 将 `TouchUserService` 实例化在具有 Shell 权限的独立进程中。
 - **权限边界**：该层直接与系统 `IInputManager` 交互，绕过应用层 `MotionEvent` 的分发限制，能够全局监听并注入触控事件。
 - **协议适配**：内置对 Linux Multi-touch Protocol (Type A/B) 的识别逻辑。针对特殊设备（如采用 Protocol A 的华为/荣耀设备）设有安全熔断机制，防止底层注入导致触控死锁。
 
-### 2. 注入引擎：双模驱动 (Injection Engines)
+### 2. 注入引擎：双模驱动
 项目实现了两种互补的触控注入方案：
 
 *   **Native Mode (高性能内核级)**
@@ -22,7 +22,7 @@
     - **实现原理**：利用反射获取 `InputManager` 实例。
     - **核心逻辑**：通过 `ShizukuBinderWrapper` 代理 `IInputManager` 接口，调用 `injectInputEvent` 方法。
 
-### 3. 渲染层：可视化引擎 (Visualization Engine)
+### 3. 渲染层：可视化引擎
 - **高性能绘制**：基于自定义 `PointerOverlayView` 实现。使用 `android.graphics.Canvas` 结合硬件加速。
 - **数据流**：`TouchUserService` 通过 `IPhysicalTouchCallback` (AIDL) 异步回调触控状态，UI 进程接收 `PhysicalFingerState` 列表并触发重绘。
 - **轨迹算法**：采用队列管理触控点轨迹，支持动态消失延迟（Fade Delay）与样条曲线平滑（Trails）。
